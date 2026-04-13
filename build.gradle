@@ -33,6 +33,12 @@ jacocoTestReport {
     }
 }
 
+// Keep clean sonar convenient for learning:
+// we explicitly compile before sonar because implicit compile is disabled.
+tasks.named('sonar') {
+    dependsOn tasks.named('classes')
+}
+
 sonar {
     properties {
         property 'sonar.projectKey', findProperty('sonarProjectKey') ?: 'tempsonar'
