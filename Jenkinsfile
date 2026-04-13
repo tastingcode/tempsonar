@@ -1,14 +1,15 @@
 pipeline {
     agent any
 
-    parameters {
-        string(name: 'SONAR_HOST_URL', defaultValue: 'http://sonarqube:9000', description: 'Docker Compose network에서 Jenkins가 바라보는 SonarQube URL')
-        string(name: 'SONAR_PROJECT_KEY', defaultValue: 'tempsonar', description: 'SonarQube project key')
-        password(name: 'SONAR_TOKEN', defaultValue: '', description: 'SonarQube에서 발급한 token')
+    options {
+        timestamps()
+        disableConcurrentBuilds()
     }
 
     environment {
         GRADLE_USER_HOME = "${JENKINS_HOME}/.gradle"
+        SONAR_HOST_URL = 'http://sonarqube:9000'
+        SONAR_PROJECT_KEY = 'tempsonar'
     }
 
     stages {
@@ -39,9 +40,12 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
+            environment {
+                SONAR_TOKEN = credentials('sonarqube-token')
+            }
             steps {
                 sh '''
-                    ./gradlew sonar \
+                    ./gradlew --no-daemon sonar \
                       -Dsonar.host.url=${SONAR_HOST_URL} \
                       -Dsonar.token=${SONAR_TOKEN} \
                       -Dsonar.projectKey=${SONAR_PROJECT_KEY}
