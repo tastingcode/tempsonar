@@ -46,7 +46,9 @@ pipeline {
                         ./gradlew --no-daemon sonar \
                           -Dsonar.host.url=${SONAR_HOST_URL} \
                           -Dsonar.token=${SONAR_TOKEN} \
-                          -Dsonar.projectKey=${SONAR_PROJECT_KEY}
+                          -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                          -Dsonar.qualitygate.wait=true \
+                          -Dsonar.qualitygate.timeout=300
                     '''
                 }
             }
