@@ -58,11 +58,17 @@ token은 Jenkins Pipeline 실행 시 `SONAR_TOKEN` 파라미터에 넣습니다.
 
 ## 4. Jenkins Pipeline 만들기
 
-학습용으로는 Jenkins에서 Pipeline job을 하나 만들고, `Jenkinsfile` 내용을 직접 붙여넣는 방식이 가장 단순합니다.
+학습용으로는 Jenkins에서 Pipeline job을 하나 만들고, Git 저장소의 `Jenkinsfile`을 읽도록 설정하는 방식이 가장 자연스럽습니다.
 
-이 프로젝트는 Docker Compose에서 Jenkins 컨테이너 안의 `/workspace/tempsonar` 경로로 소스가 마운트됩니다. 그래서 처음에는 `SOURCE_DIR=/workspace/tempsonar` 기본값을 그대로 두면 됩니다.
+```text
+Definition=Pipeline script from SCM
+SCM=Git
+Repository URL=https://github.com/tastingcode/tempsonar
+Branch Specifier=*/main
+Script Path=Jenkinsfile
+```
 
-조금 익숙해지면 다음 단계에서 Git 저장소를 만들고 `Pipeline script from SCM` 방식으로 바꿔봅니다. 그때는 `SOURCE_DIR=.` 또는 Jenkins workspace 기준 경로로 바꿔서 실행합니다.
+Jenkins가 Git 저장소를 checkout하면 현재 workspace에 소스가 준비됩니다. 따라서 Jenkinsfile은 별도 `SOURCE_DIR` 없이 현재 workspace에서 `./gradlew`를 실행합니다.
 
 ## 5. Jenkins에서 실행하기
 
@@ -72,7 +78,6 @@ Pipeline을 실행할 때 파라미터를 확인합니다.
 SONAR_HOST_URL=http://sonarqube:9000
 SONAR_PROJECT_KEY=tempsonar
 SONAR_TOKEN=<SonarQube에서 만든 token>
-SOURCE_DIR=/workspace/tempsonar
 ```
 
 실행이 끝나면 SonarQube의 `tempsonar` 프로젝트에서 분석 결과를 확인합니다.
