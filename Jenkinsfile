@@ -40,16 +40,15 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            environment {
-                SONAR_TOKEN = credentials('sonarqube-token')
-            }
             steps {
-                sh '''
-                    ./gradlew --no-daemon sonar \
-                      -Dsonar.host.url=${SONAR_HOST_URL} \
-                      -Dsonar.token=${SONAR_TOKEN} \
-                      -Dsonar.projectKey=${SONAR_PROJECT_KEY}
-                '''
+                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                    sh '''
+                        ./gradlew --no-daemon sonar \
+                          -Dsonar.host.url=${SONAR_HOST_URL} \
+                          -Dsonar.token=${SONAR_TOKEN} \
+                          -Dsonar.projectKey=${SONAR_PROJECT_KEY}
+                    '''
+                }
             }
         }
     }

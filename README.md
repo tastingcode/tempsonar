@@ -88,6 +88,10 @@ SONAR_PROJECT_KEY=tempsonar
 SONAR_TOKEN=credentials('sonarqube-token')
 ```
 
+`ERROR: sonarqube-token`으로 실패하면 Jenkins가 해당 ID의 Credential을 찾지 못한 것입니다. Jenkins에서 `Manage Jenkins -> Credentials -> System -> Global credentials -> Add Credentials`로 이동한 뒤 위 값 그대로 등록합니다.
+
+Jenkins Credentials 화면에서 `Description`이 아니라 `ID`가 `sonarqube-token`인지 확인합니다. ID를 비워두고 만들면 Jenkins가 UUID 형태의 ID를 자동 생성하므로, Jenkinsfile의 `credentialsId`와 매칭되지 않습니다.
+
 실행이 끝나면 SonarQube의 `tempsonar` 프로젝트에서 분석 결과를 확인합니다.
 
 ## 학습 순서
