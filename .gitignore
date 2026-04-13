@@ -1,0 +1,13 @@
+.gradle/
+build/
+out/
+.idea/
+*.iml
+
+.env
+
+jenkins_home/
+sonarqube_data/
+sonarqube_extensions/
+sonarqube_logs/
+postgres_data/

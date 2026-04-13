@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.sonarqube' version '4.4.1.3373'
+}
+
+group = 'study.sonarlab'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy tasks.named('jacocoTestReport')
+}
+
+jacocoTestReport {
+    dependsOn tasks.named('test')
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+sonar {
+    properties {
+        property 'sonar.projectKey', findProperty('sonarProjectKey') ?: 'tempsonar'
+        property 'sonar.projectName', findProperty('sonarProjectName') ?: 'tempsonar'
+        property 'sonar.sources', 'src/main/java'
+        property 'sonar.tests', 'src/test/java'
+        property 'sonar.java.binaries', 'build/classes/java/main'
+        property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
+    }
+}
