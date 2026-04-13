@@ -33,19 +33,29 @@ jacocoTestReport {
     }
 }
 
-// Keep clean sonar convenient for learning:
-// we explicitly compile before sonar because implicit compile is disabled.
 tasks.named('sonar') {
     dependsOn tasks.named('classes')
+    dependsOn tasks.named('test')
+    dependsOn tasks.named('jacocoTestReport')
 }
 
 sonar {
     properties {
-        property 'sonar.projectKey', findProperty('sonarProjectKey') ?: 'tempsonar'
-        property 'sonar.projectName', findProperty('sonarProjectName') ?: 'tempsonar'
+        property 'sonar.projectKey', findProperty('sonarProjectKey') ?: System.getenv('SONAR_PROJECT_KEY') ?: 'tempsonar'
+        property 'sonar.projectName', findProperty('sonarProjectName') ?: System.getenv('SONAR_PROJECT_NAME') ?: 'tempsonar'
+        property 'sonar.host.url', findProperty('sonarHostUrl') ?: System.getenv('SONAR_HOST_URL') ?: 'http://localhost:9000'
         property 'sonar.sources', 'src/main/java'
         property 'sonar.tests', 'src/test/java'
         property 'sonar.java.binaries', 'build/classes/java/main'
+        property 'sonar.junit.reportPaths', 'build/test-results/test'
         property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
+
+        if (System.getenv('SONAR_TOKEN')) {
+            property 'sonar.token', System.getenv('SONAR_TOKEN')
+            property 'sonar.login', System.getenv('SONAR_TOKEN')
+        } else if (project.hasProperty('sonarToken')) {
+            property 'sonar.token', project.property('sonarToken')
+            property 'sonar.login', project.property('sonarToken')
+        }
     }
 }
