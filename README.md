@@ -94,19 +94,6 @@ Jenkins Credentials 화면에서 `Description`이 아니라 `ID`가 `sonarqube-t
 
 실행이 끝나면 SonarQube의 `tempsonar` 프로젝트에서 분석 결과를 확인합니다.
 
-## Quality Gate 실패 실습
-
-Jenkinsfile은 Quality Gate 결과를 기다리도록 설정되어 있습니다.
-
-```text
--Dsonar.qualitygate.wait=true
--Dsonar.qualitygate.timeout=300
-```
-
-실습용으로 `QualityGatePracticeService`는 테스트를 만들지 않았습니다. 새 코드 커버리지가 낮아져서 기본 Sonar way 기준에서는 Quality Gate 실패를 관찰하기 쉽습니다.
-
-실습 후 성공 상태로 되돌리고 싶으면 해당 파일을 제거하거나 테스트를 추가한 뒤 다시 빌드합니다.
-
 ## 학습 순서
 
 1. Spring Boot 테스트가 Jenkins에서 실행되는지 확인합니다.

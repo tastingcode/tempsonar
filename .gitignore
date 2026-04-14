@@ -11,3 +11,4 @@ sonarqube_data/
 sonarqube_extensions/
 sonarqube_logs/
 postgres_data/
+README.md
